@@ -1,0 +1,21 @@
+[project]
+name = "saas-base"
+version = "0.0.1"
+description = "SaaS Base fastapi backend"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "aiosmtplib>=4.0.1",
+    "alembic>=1.16.1",
+    "boto>=2.49.0",
+    "fastapi[standard]>=0.115.12",
+    "minio>=7.2.15",
+    "passlib>=1.7.4",
+    "psycopg2-binary>=2.9.10",
+    "pycryptodome>=3.23.0",
+    "pydantic-settings>=2.9.1",
+    "pyjwt>=2.10.1",
+    "python-jose>=3.4.0",
+    "sqlalchemy>=2.0.41",
+    "sqlmodel>=0.0.24",
+]
