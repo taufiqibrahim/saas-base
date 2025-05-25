@@ -41,7 +41,7 @@ export function ProfileForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      full_name: user?.full_name,
+      full_name: user?.full_name || '',
       email: user?.email,
     },
   });

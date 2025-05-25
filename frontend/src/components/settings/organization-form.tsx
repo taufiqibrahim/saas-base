@@ -42,7 +42,8 @@ export function OrganizationForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    // Logic here
+    // TODO: Logic here
+    console.log(values)
     setIsLoading(false);
   }
 
