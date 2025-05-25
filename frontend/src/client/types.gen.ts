@@ -18,10 +18,9 @@ export type AccountCreateWritable = {
 };
 
 export type AccountProfileMe = {
-    email: string;
-    disabled?: boolean;
-    account_type?: AccountType;
     uid: string;
+    email: string;
+    avatar: string | null;
     full_name: string | null;
     organizations: Array<OrganizationPublic>;
 };

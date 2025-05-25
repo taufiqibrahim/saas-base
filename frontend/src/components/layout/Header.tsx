@@ -1,4 +1,3 @@
-import { User } from "@/auth/types";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
@@ -8,6 +7,8 @@ import { AppBreadcrumbs } from "@/components/layout/Breadcrumbs";
 import { UserNav } from "@/components/layout/UserNav";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
+import { User } from "@/types";
+
 
 export interface HeaderProps {
   user: User;

@@ -1,4 +1,4 @@
-import { BarChart3, Code, Database, Gauge, PanelRight, Play, Terminal, Timer } from 'lucide-react';
+import { BarChart3, Code, Database } from 'lucide-react';
 
 export interface User {
   id: string;

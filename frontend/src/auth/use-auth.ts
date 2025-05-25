@@ -1,12 +1,12 @@
 import { createContext, useContext } from "react";
 import { LoginResponse, ResetPasswordCredentials, ResetPasswordResponse, SignupResponse } from "./types";
-import { AccountProfileMe } from "@/client";
+import { User } from "@/types";
 
 
 // Defines the shape of the authentication context
 interface AuthContextType {
   accessToken?: string | null;
-  user?: AccountProfileMe;
+  user?: User;
   refetchUser: () => void;
   // isLoading: boolean;
   // error: unknown;

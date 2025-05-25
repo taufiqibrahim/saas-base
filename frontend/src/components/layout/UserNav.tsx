@@ -1,4 +1,3 @@
-import { User } from "@/auth/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -8,6 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ACCESS_TOKEN_KEY } from "@/constants";
+import { User } from "@/types";
 import { LogOut } from "lucide-react";
 
 export interface UserNavProps {
@@ -27,7 +27,7 @@ export function UserNav({ user, isOpen, onOpenChange }: UserNavProps) {
     <DropdownMenu open={isOpen} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>
         <Avatar className="h-8 w-8 border cursor-pointer shadow-xs">
-          <AvatarImage src={user.avatar} alt={user.fullName} />
+          <AvatarImage src={user.avatar!} alt={user.full_name!} />
           <AvatarFallback className="rounded-lg bg-background hover:bg-accent hover:text-accent-foreground">
             {user.initials}
           </AvatarFallback>
@@ -41,13 +41,13 @@ export function UserNav({ user, isOpen, onOpenChange }: UserNavProps) {
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
             <Avatar className="h-8 w-8 rounded-lg">
-              <AvatarImage src={user.avatar} alt={user.fullName} />
+              <AvatarImage src={user.avatar!} alt={user.full_name!} />
               <AvatarFallback className="rounded-lg">
                 {user.initials}
               </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">{user.fullName}</span>
+              <span className="truncate font-semibold">{user.full_name}</span>
               <span className="truncate text-xs">{user.email}</span>
             </div>
           </div>

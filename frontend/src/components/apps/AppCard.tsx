@@ -10,7 +10,7 @@ interface AppCardProps {
 
 const AppCard: React.FC<AppCardProps> = ({ app, onClick }) => {
   // Dynamically get the icon component
-  const IconComponent = (LucideIcons as Record<string, React.FC<{ size?: number }>>)[app.icon] || LucideIcons.Box;
+  const IconComponent = (LucideIcons as unknown as Record<string, React.FC<{ size?: number }>>)[app.icon] || LucideIcons.Box;
   
   // Calculate usage percentage
   const usagePercentage = (app.currentUsage / app.usageLimit) * 100;

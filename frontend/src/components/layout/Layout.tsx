@@ -35,10 +35,12 @@ export function Layout({
             {headerEnabled && (
               <Header
                 user={{
-                  email: userData?.email,
-                  avatar: userData?.avatar,
-                  fullName: userData?.full_name,
+                  email: userData?.email!,
+                  avatar: userData?.avatar!,
+                  full_name: userData?.full_name ?? userData?.email!,
                   initials: getInitials(userData?.email),
+                  organizations: userData?.organizations || [],
+                  uid: userData?.uid!
                 }}
                 fixed={fixedHeader}
               />
