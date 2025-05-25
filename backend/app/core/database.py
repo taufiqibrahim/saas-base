@@ -1,21 +1,27 @@
-from sqlmodel import Session, SQLModel, create_engine
+from urllib.parse import quote_plus
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
 
-from app.core.config import secret_settings
+from app.core.config import db_settings
 
-if secret_settings.SQLALCHEMY_DATABASE_URI.startswith("sqlite"):
-    engine = create_engine(
-        secret_settings.SQLALCHEMY_DATABASE_URI,
-        connect_args={"check_same_thread": False},
-    )
+
+username = db_settings.DB_USER.get_secret_value()
+password = quote_plus(db_settings.DB_PASSWORD.get_secret_value())
+host = db_settings.DB_HOST
+port = db_settings.DB_PORT
+database = db_settings.DB_NAME
+db_path = "db.sqlite3"
+
+if db_settings.DB_TYPE == "sqlite":
+    engine = create_async_engine(f"sqlite+aiosqlite:///{db_path}", connect_args={"check_same_thread": False})
+elif db_settings.DB_TYPE == "postgres":
+    # engine = create_async_engine(f"postgresql+asyncpg://{username}:{password}@{host}:{port}/{database}", echo=True)
+    engine = create_async_engine(f"postgresql+psycopg://{username}:{password}@{host}:{port}/{database}", echo=True)
 else:
-    engine = create_engine(secret_settings.SQLALCHEMY_DATABASE_URI)
+    raise NotImplementedError(f"DB_TYPE={db_settings.DB_TYPE} not implemented")
 
+AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
-def get_db():
-    with Session(engine) as session:
+async def get_db():
+    async with AsyncSessionLocal() as session:
         yield session
-
-
-def create_db_and_tables():
-    engine = create_engine(secret_settings.SQLALCHEMY_DATABASE_URI)
-    SQLModel.metadata.create_all(engine)

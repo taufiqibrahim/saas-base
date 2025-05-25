@@ -1,47 +1,21 @@
 import logging
-from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.gzip import GZipMiddleware
 
 # Middlewares
-from sqlmodel import create_engine, text
 from starlette.middleware.cors import CORSMiddleware
 
 # Endpoints
 from app._api.v1 import accounts as account_endpoints_v1
 
 # Core
-from app.core.config import secret_settings, settings
-from app.utils import run_alembic_migration, set_operation_ids
-
-# from app.core.logging import get_logger, setup_logging
-
-
-# from app.users.api.v1 import endpoints as users_endpoints_v1
-# from app.apps.api.v1 import endpoints as apps_endpoints_v1
-# from app.files.api.v1 import endpoints as files_endpoints_v1
-# from app.geospatial_mapping.api.v1 import endpoints as geospatial_mapping_endpoints_v1
+from app.core.lifespan import lifespan
+from app.core.config import settings
+from app.utils import set_operation_ids
 
 
 logger = logging.getLogger(__name__)
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    logger.info("Running startup events...")
-
-    logger.info("DATABASE: Create postgis extension")
-    with create_engine(
-        secret_settings.SQLALCHEMY_DATABASE_URI, isolation_level="AUTOCOMMIT"
-    ).connect() as conn:
-        conn.execute(text("CREATE EXTENSION IF NOT EXISTS postgis"))
-
-    logger.info("DATABASE: Run alembic migrations")
-    run_alembic_migration(secret_settings.SQLALCHEMY_DATABASE_URI)
-
-    yield
-
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

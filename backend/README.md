@@ -41,7 +41,6 @@ pipx install uv
 ```bash
 uv venv
 uv sync
-uv compile      # (optional: generate lockfile)
 ```
 
 ### 3. Run the FastAPI server
@@ -61,7 +60,7 @@ Make sure your `DATABASE_URL` is set (e.g. in `.env` or `app/core/config.py`).
 ### Create a migration:
 
 ```bash
-alembic revision --autogenerate -m "Add new model"
+alembic revision --autogenerate -m "Add new model" --rev-id 002
 ```
 
 ### Apply migrations:

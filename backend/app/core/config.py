@@ -1,7 +1,7 @@
 import secrets
 from typing import Annotated, Any, Literal
 
-from pydantic import AnyUrl, BeforeValidator, EmailStr, computed_field
+from pydantic import AnyUrl, BeforeValidator, EmailStr,  SecretStr, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -51,6 +51,19 @@ class Settings(BaseSettings):
     TEMPORAL_ADDRESS: str = "localhost:7233"
 
 
+class DBSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_ignore_empty=True,
+        extra="ignore",
+    )
+    DB_TYPE: Literal["postgres", "sqlite"] = "sqlite"
+    DB_HOST: str
+    DB_PORT: str
+    DB_NAME: str
+    DB_USER: SecretStr
+    DB_PASSWORD: SecretStr
+
 class SecretSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -58,7 +71,6 @@ class SecretSettings(BaseSettings):
         extra="ignore",
     )
     SECRET_KEY: str = secrets.token_urlsafe(32)
-    SQLALCHEMY_DATABASE_URI: str = "sqlite:///db.sqlite3"
     UPLOAD_BACKEND_UPLOADTHING_SECRET: str = "sk_live_****"
 
 
@@ -82,11 +94,11 @@ class DemoSettings(BaseSettings):
         extra="ignore",
     )
     FIRST_SUPERUSER_EMAIL: EmailStr = "admin@example.com"
-    FIRST_SUPERUSER_PASSWORD: str = "changeme"
+    FIRST_SUPERUSER_PASSWORD: str = "Changeme123!"
     DEMO_USER_EMAIL: EmailStr = "demo@example.com"
-    DEMO_USER_PASSWORD: str = "changeme"
+    DEMO_USER_PASSWORD: str = "Changeme123!"
     DEMO_SERVICE_ACCOUNT_EMAIL: EmailStr = "demo-sa@example.com"
-    DEMO_SERVICE_ACCOUNT_APIKEY: str = "changeme"
+    DEMO_SERVICE_ACCOUNT_APIKEY: str = "Changeme123!"
 
 
 class MinioSettings(BaseSettings):
@@ -115,6 +127,7 @@ class PostgisSettings(BaseSettings):
 
 
 settings = Settings()
+db_settings = DBSettings()
 demo_settings = DemoSettings()
 secret_settings = SecretSettings()
 minio_settings = MinioSettings()

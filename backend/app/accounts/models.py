@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
-from pydantic import SecretStr, field_validator
+from pydantic import SecretStr, field_validator, model_validator
 from sqlmodel import TIMESTAMP, Column, Enum, Field, Relationship, SQLModel
 
 from app.organizations.models import Organization, OrganizationPublic
@@ -46,22 +46,30 @@ class Account(AccountBase, table=True):
 class AccountCreate(AccountBase):
     uid: Optional[uuid.UUID] = None
     full_name: str
-    password: SecretStr
+    password: Optional[SecretStr] = None
     account_type: Optional[AccountType] = AccountType.USER
 
-    @field_validator("password")
-    def password_validation(cls, v):
-        value = v.get_secret_value()
-        if len(value) < 8:
+    @model_validator(mode="after")
+    def validate_password_rules(cls, model):
+        # Skip password checks for service accounts
+        if model.account_type == AccountType.SERVICE_ACCOUNT:
+            return model
+        
+        if not model.password:
+            raise ValueError("Password is required for non-service accounts")
+        
+        password_value = model.password.get_secret_value()
+
+        if len(password_value) < 8:
             raise ValueError("Password must be at least 8 characters")
-        if not any(c.islower() for c in value):
+        if not any(c.islower() for c in password_value):
             raise ValueError("Password must contain at least one lowercase letter")
-        if not any(c.isupper() for c in value):
+        if not any(c.isupper() for c in password_value):
             raise ValueError("Password must contain at least one uppercase letter")
-        if not any(c.isdigit() for c in value):
+        if not any(c.isdigit() for c in password_value):
             raise ValueError("Password must contain at least one number")
 
-        return value
+        return model
 
 
 class AccountPublic(AccountBase):
@@ -95,6 +103,9 @@ class AccountProfile(AccountProfileBase, table=True):
     )
     account: Optional["Account"] = Relationship(back_populates="profile")
 
+    # AccountProfile attributes
+    avatar: Optional[str]
+
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
@@ -103,7 +114,9 @@ class AccountProfile(AccountProfileBase, table=True):
 
 
 # ******** AccountProfileMe *****************************************************
-class AccountProfileMe(AccountBase):
+class AccountProfileMe(SQLModel):
     uid: uuid.UUID
+    email: str
+    avatar: str | None
     full_name: str | None
     organizations: list[OrganizationPublic]

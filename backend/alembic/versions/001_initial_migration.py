@@ -2,7 +2,7 @@
 
 Revision ID: 001
 Revises: 
-Create Date: 2025-05-01 08:17:50.221304
+Create Date: 2025-05-25 14:13:28.856832
 
 """
 from typing import Sequence, Union
@@ -41,6 +41,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('uid', sa.Uuid(), nullable=False),
     sa.Column('account_id', sa.Integer(), nullable=True),
+    sa.Column('avatar', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.TIMESTAMP(), nullable=True),
     sa.ForeignKeyConstraint(['account_id'], ['account.id'], ),
