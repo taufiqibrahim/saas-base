@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { APP_NAME } from "@/constants";
 import { Blocks, Boxes, FolderTree, Settings } from "lucide-react";
 
 export function AppSidebar() {
@@ -41,7 +42,7 @@ export function AppSidebar() {
                 <Blocks className="size-4" />
               </div>
               <div className="flex flex-col gap-0.5 leading-none">
-                <span className="font-semibold">vite-shadcn-fastapi</span>
+                <span className="font-semibold">{APP_NAME}</span>
                 <span className="text-xs text-zinc-500">v0.0.0</span>
               </div>
             </a>
